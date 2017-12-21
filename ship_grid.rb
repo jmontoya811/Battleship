@@ -1,33 +1,41 @@
 require_relative 'ship_cell.rb'
+require_relative 'agrid.rb'
 
 module Battleship
-	class Board
-		def initialize(input)
-			@grid = input.fetch.grid
+	class Board < Grid
+		def initialize(input, buildGrid)
+			@grid = Grid.new
 		end
 	
 
 # module Battleship
 # 	class Board
-		attr_reader :grid
+		attr_reader :grid, :buildGrid
 		def initialize(input = {})
-			@grid = input.fetch(:grid, default_grid)
+			@grid = input.fetch(:grid, :buildGrid)
 		end
 
 		def get_ship(x, y)
-			grid[y] [x]
+			fixLine(x)
 		end
 
+		# def set_ship(x, y, svalue)
+		#   get_ship(x, y).rowMark = @input
+		# end
+
+
 		def set_ship(x, y, svalue)
-		  get_ship(x, y).svalue = svalue
+		  rowMark(x, y)
+		  return modGrid
 		end
 
 		def get_cell(x, y)
-  			grid[y][x]
+  			fixLine(x)
 		end
 
-		def set_cell(x, y, value)
-		  get_cell(x, y).value = value
+		def set_cell(x, y, input)
+		  rowMark(x, y)
+		  return modGrid
 		end
 
 		# def ship_hit
@@ -72,6 +80,10 @@ module Battleship
 
 		def default_grid
 			Array.new(3) { Array.new(3) { Cell.new }}
+		end
+
+		def placed_ship
+			@current_player.input
 		end
 	end
 end
